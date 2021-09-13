@@ -1,0 +1,40 @@
+<div class="container">
+    <form novalidate #form="ngForm" (submit)="onSubmit(form)">
+        <div class="col-6">
+            <input type="hidden" name="Id" [value]="service.formData.Id"/>
+            <div class="form-group">
+                <label>Title</label>
+                <input class="form-control" placeholder="Title" name="Title" #Title="ngModel" 
+                [(ngModel)]="service.formData.Title" required [class.is-invalid]="Title.invalid && Title.touched"
+                maxlength="60">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input class="form-control" placeholder="Description" name="Description" #Description="ngModel" 
+                [(ngModel)]="service.formData.Description" maxlength="60">
+            </div>
+            <div class="form-group">
+                <label>Genre</label>
+                <input class="form-control" placeholder="Genre" name="Genre" #Genre="ngModel" 
+                [(ngModel)]="service.formData.Genre" required [class.is-invalid]="Genre.invalid && Genre.touched"> 
+            </div>
+
+            <div class="form-group">
+                <label>Author</label>
+                <select class="form-select" name="AuthorId" [(ngModel)]="service.formData.AuthorId" #AuthorId="ngModel" 
+                    required [class.invalidSelectList]="AuthorId.invalid && AuthorId.touched">
+                <option *ngFor="let Author of Authors" [value]="Author.id">
+                        {{Author.firstName}} {{Author.lastName}}
+                </option>
+                </select>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Add</button>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>

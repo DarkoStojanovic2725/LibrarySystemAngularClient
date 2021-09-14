@@ -13,11 +13,6 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
   })
 
   export class EditBookComponent implements OnInit {
-    
-    bookForm: FormGroup;
-    title: string;
-    id: string;
-    description: string;
     genre: number;
 
     genreEnumKeys: any [];

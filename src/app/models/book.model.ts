@@ -1,7 +1,7 @@
 export class Book {
-    Id: number = 0;
-    Title: string = '';
-    Description: string = '';
-    Genre: string = '';
-    AuthorId: number = 0;
+    Id: number;
+    Title: string;
+    Description: string;
+    Genre: number;
+    Author: string;
 }

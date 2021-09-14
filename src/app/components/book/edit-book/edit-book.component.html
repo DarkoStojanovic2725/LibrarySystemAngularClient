@@ -1,30 +1,28 @@
 <div class="container">
-    <form novalidate #form="ngForm" (submit)="onSubmit()">
+    <form [formGroup]="bookForm" (submit)="onSubmit()">
         <div class="col-6">
-            <input type="hidden" name="Id" [value]="bookModel.Id"/>
+            <input type="hidden" formControlName="id"/>
+
             <div class="form-group">
                 <label>Title</label>
-                <input class="form-control" value="{{bookModel.Title}}" placeholder="Title" name="Title" #Title="ngModel" 
-                [(ngModel)]="bookModel.Title" required [class.is-invalid]="Title.invalid && Title.touched"
-                maxlength="60">
+                <input class="form-control" formControlName="title">
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <input class="form-control" placeholder="Description" name="Description" #Description="ngModel" 
-                [(ngModel)]="bookModel.Description" maxlength="60">
+                <input class="form-control" formControlName="description">
             </div>
 
             <div class="form-group">
                 <label>Genre</label>
-                <select class="form-select" name="Genre" [(ngModel)]="bookModel.Genre" #Genre="ngModel">
+                <select class="form-select" formControlName="genre">
                     <option *ngFor="let key of genreEnumKeys"
-                            [value]="key">
+                            [ngValue]="genre" [selected]="genre">
                       {{genres[key]}}
                     </option>
                   </select>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label>Author</label>
                 <select class="form-select" name="AuthorId" [(ngModel)]="bookModel.AuthorId" #AuthorId="ngModel" 
                     required [class.invalidSelectList]="AuthorId.invalid && AuthorId.touched">
@@ -32,13 +30,11 @@
                         {{Author.firstName}} {{Author.lastName}}
                 </option>
                 </select>
-            </div>
+            </div> -->
             <br/>
-            <div class="row">
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Add</button>
-                </div>
-            </div>
+            <div class="button-row">
+                <button type="submit" [disabled]="!bookForm.valid" class="btn btn-success">Save</button>
+              </div>
         </div>
         
     </form>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Author } from "src/app/models/author.model";
 import { NewBook } from "src/app/models/newbook.model";
 import { BookService } from "src/app/services/book.service";
@@ -22,7 +22,7 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
 
     newBook: NewBook = new NewBook();
 
-    constructor(private service: BookService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
+    constructor(private service: BookService, private route: ActivatedRoute, private formBuilder: FormBuilder, private router: Router) { }
 
     ngOnInit() {
         this.getAuthors();
@@ -34,6 +34,9 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
         console.log(this.newBook);
         this.service.updateBook(this.newBook).subscribe(response => {
             console.log(response.successful);
+            if(response.successful){
+                this.router.navigate(['/books']);
+            }
         });
     }
 

@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Author } from "src/app/models/author.model";
 import { NewBook } from "src/app/models/newbook.model";
@@ -12,7 +12,7 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
     styleUrls: []
   })
 
-  export class EditBookComponent implements OnInit, OnDestroy{
+  export class EditBookComponent implements OnInit {
     
     bookForm: FormGroup;
     title: string;
@@ -33,10 +33,6 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
         this.getAuthors();
         this.populateGenreEnumKeys();
         this.getBook(this.route.snapshot.params['id']);
-    }
-
-    ngOnDestroy(){
-
     }
 
     onSubmit(){

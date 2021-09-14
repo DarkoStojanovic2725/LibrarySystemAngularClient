@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { Author } from "src/app/models/author.model";
+import { NewBook } from "src/app/models/newbook.model";
 import { BookService } from "src/app/services/book.service";
 import { Genre } from "../../shared/Enums/Genre.Enum";
 
@@ -10,7 +12,7 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
     styleUrls: []
   })
 
-  export class EditBookComponent implements OnInit{
+  export class EditBookComponent implements OnInit, OnDestroy{
     
     bookForm: FormGroup;
     title: string;
@@ -20,33 +22,74 @@ import { Genre } from "../../shared/Enums/Genre.Enum";
 
     genreEnumKeys: any [];
     genres = Genre;
-    
-    constructor(private service: BookService, private route: ActivatedRoute, private formBuilder: FormBuilder) {
-    }
+    authors: any[];
+    selectedGenre: number;
+
+    newBook: NewBook = new NewBook();
+
+    constructor(private service: BookService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
 
     ngOnInit() {
+        this.getAuthors();
         this.populateGenreEnumKeys();
-        //this.id = this.route.snapshot.params['id'];
-        this.bookForm = this.formBuilder.group({
-            id : this.route.snapshot.params['id'],
-            title : ['', Validators.required],
-            description : ['', Validators.required],
-            genre : ['', Validators.required]
-          });
+        this.getBook(this.route.snapshot.params['id']);
+    }
 
-          this.getBook(this.route.snapshot.params['id']);
+    ngOnDestroy(){
+
     }
 
     onSubmit(){
+        console.log(this.newBook);
+        this.service.updateBook(this.newBook).subscribe(response => {
+            console.log(response.successful);
+        });
+    }
 
+    getAuthors(){
+        this.service.getAuthors().subscribe(response => {
+            this.mapAuthor(response);
+        });
     }
 
     getBook(id: number) {
-        this.service.getBookById(id).subscribe(x => this.bookForm.patchValue(x));
-        console.log(this.bookForm);
-      }
+        this.service.getBookById(id).subscribe(resp => {
+            this.mapNewBook(resp);
+        });
+    }
 
       private populateGenreEnumKeys(){
-        this.genreEnumKeys = Object.keys(this.genres).filter(Number);
+        this.genreEnumKeys = Object.keys(this.genres).filter(element => !isNaN(Number(element)));
+      }
+
+      public mapAuthor(data: any){
+          this.authors = data.map((x: any) => this.populateNewAuthor(x));
+          console.log('authors', this.authors);
+      }
+
+    populateNewAuthor(data: any) {
+        let author = new Author;
+        author.id = data['id'];
+        author.firstName = data['firstName'];
+        author.lastName = data['lastName'];
+        return author;
+    }
+
+      public mapNewBook(data: any){
+          this.newBook = this.mapNewBookData(data);
+      }
+
+      public mapNewBookData(data: any){
+          let result = new NewBook();
+          result.Id = data['id'];
+          result.Title = data['title'];
+          result.Description = data['description'];
+          result.Genre = data['genre'];
+          result.AuthorId = data['authorId'];
+          return result;
+      }
+
+      onGenreChange(value: number) {
+        this.newBook.Genre = value;
       }
   }

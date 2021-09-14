@@ -22,6 +22,11 @@ export class BookService {
     return this.http.post<AddNewBookResponse>(this.booksUrl + '/Insert', bookModel);
   }
 
+  updateBook(bookModel: NewBook){
+    bookModel.Genre = Number(bookModel.Genre);
+    return this.http.put<AddNewBookResponse>(this.booksUrl + '/Update', bookModel);
+  }
+
   getAuthors(){
     return this.http.get<Author[]>(this.authorsUrl);
   }

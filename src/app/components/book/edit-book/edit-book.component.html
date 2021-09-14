@@ -1,41 +1,37 @@
 <div class="container">
-    <form [formGroup]="bookForm" (submit)="onSubmit()">
-        <div class="col-6">
-            <input type="hidden" formControlName="id"/>
+    <form novalidate #bookForm="ngForm" (submit)="onSubmit()">
 
-            <div class="form-group">
-                <label>Title</label>
-                <input class="form-control" formControlName="title">
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <input class="form-control" formControlName="description">
-            </div>
-
-            <div class="form-group">
-                <label>Genre</label>
-                <select class="form-select" formControlName="genre">
-                    <option *ngFor="let key of genreEnumKeys"
-                            [ngValue]="genre" [selected]="genre">
-                      {{genres[key]}}
-                    </option>
-                  </select>
-            </div>
-
-            <!-- <div class="form-group">
-                <label>Author</label>
-                <select class="form-select" name="AuthorId" [(ngModel)]="bookModel.AuthorId" #AuthorId="ngModel" 
-                    required [class.invalidSelectList]="AuthorId.invalid && AuthorId.touched">
-                <option *ngFor="let Author of Authors" [value]="Author.id">
-                        {{Author.firstName}} {{Author.lastName}}
-                </option>
-                </select>
-            </div> -->
-            <br/>
-            <div class="button-row">
-                <button type="submit" [disabled]="!bookForm.valid" class="btn btn-success">Save</button>
-              </div>
+        <div class="form-group">
+            <label>Title:</label>
+            <input class="form-control" value="{{newBook.Title}}" placeholder="Title" name="Title" #Title="ngModel" 
+            [(ngModel)]="newBook.Title" required [class.is-invalid]="Title.invalid && Title.touched" maxlength="60">
         </div>
-        
+
+        <div class="form-group">
+            <label>Description:</label>
+            <input class="form-control" name="Description" #Description="ngModel" 
+            [(ngModel)]="newBook.Description" maxlength="60">
+        </div>
+
+        <div class="form-group">
+            <label>Genre:</label>
+            <select class="form-select" name="Genre" [ngModel]="selectedGenre" (ngModelChange)="onGenreChange($event)">
+                <option *ngFor="let key of genreEnumKeys" [ngValue]="key" [selected]="newBook.Genre == key" [label]="genres[key]">{{genre}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Author:</label>
+            <select class="form-select" name="AuthorId" [(ngModel)]="newBook.AuthorId" #AuthorId="ngModel">
+                <option *ngFor="let author of authors" [ngValue]="author.id" [selected]="newBook.AuthorId == author.id">{{author.firstName}} {{author.lastName}}</option>
+            </select>
+        </div>
+
+        <br/>
+    
+        <div class="button-row">
+            <button type="submit" class="btn btn-success">Save</button>
+          </div>
+
     </form>
 </div>
